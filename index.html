@@ -115,6 +115,7 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
+      flex-wrap: wrap; /* REVISED: Allows items to wrap on small screens */
     }
 
     .brandLeft{
@@ -122,6 +123,12 @@
       align-items:center;
       gap:14px;
       min-width: 0;
+      flex-wrap: wrap; /* REVISED: Ensures logo and text can stack if needed */
+    }
+
+    .brandLeft img {
+      max-width: 100%; /* REVISED: Ensures logo doesn't exceed screen width */
+      height: auto;
     }
 
     .heroTitleBlock{ min-width: 0; }
@@ -135,7 +142,7 @@
       font-weight: 800;
       line-height: 1.05;
       font-size: clamp(28px, 3.2vw, 44px);
-      white-space: nowrap;
+      white-space: normal; /* REVISED: Prevents text from pushing off screen */
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -398,6 +405,8 @@
       .container{ padding: 0 14px; }
       .sectionPad{ padding: 44px 0; }
       .card{ padding: 16px; }
+      .brandLeft { justify-content: center; text-align: center; } /* REVISED: Centers header content on mobile */
+      .heroRow { justify-content: center; }
     }
 
     .metricTile{
@@ -1041,7 +1050,8 @@
     <header class="heroHeader">
       <div class="heroInner reveal">
         <div class="heroRow">
-          <div class="brandLeft"> <img src="senseye-white-logo.png" width="30%" height="30%" alt=""/>
+          <div class="brandLeft"> 
+            <img src="senseye-white-logo.png" width="383" height="100" alt="Senseye Logo"/>
             <div class="heroTitleBlock">
               <h1 class="heroTitle">V.I.E.W.</h1>
               <div class="heroSubtitle">Validation, Insight, & Executive Wrap-up</div>
@@ -1200,7 +1210,7 @@
 
       <div class="grid">
         <div class="card col-6 reveal">
-          <h3>Computer vision accuracy</h3>
+          <h3>Computer Vision Accuracy</h3>
           <p class="muted">Highlight: AUC improved to <strong>0.628</strong> with merged metadata; MCC improved to <strong>0.250</strong>.</p>
           <p class="muted">&nbsp;</p>
 <div class="imgFrame">
@@ -1208,7 +1218,7 @@
           </div>
 
           <details data-track="validation-expand">
-            <summary>Investor context (read more)</summary>
+            <summary>Investor Context (read more)</summary>
             <p>
               This internal benchmark supports continued optimization and informs the Phase III kickoff. It does not
               constitute a guarantee of regulatory clearance or future performance.
@@ -1217,7 +1227,7 @@
         </div>
 
         <div class="card col-6 reveal">
-          <h3>Why this matters</h3>
+          <h3>Why This Matters</h3>
           <p class="muted">
             Accuracy improvements, paired with major processing efficiency gains, reduce operational friction and
             support scalable trial execution—an important bridge between R&amp;D and commercialization.
@@ -1235,7 +1245,7 @@
           </div>
 
           <details data-track="balanced-disclosure">
-            <summary>Balanced disclosure (required)</summary>
+            <summary>Balanced Disclosure (required)</summary>
             <p>
               Further clinical trials are required as part of FDA review. Clinical and regulatory outcomes are not guaranteed.
             </p>
@@ -1254,14 +1264,14 @@
     <div class="container">
       <div class="kicker reveal">Updates</div>
       <h2 class="title reveal">Platform Improvements &amp; Operational Momentum</h2>
-      <p class="lede reveal">
+      <p>
         Infrastructure upgrades, improved instructions, and stronger UX reduced data loss and user error, improving
         study efficiency and readiness for higher-volume execution.
       </p>
 
       <div class="grid">
         <div class="card col-7 reveal">
-          <h3>Data quality &amp; participant experience</h3>
+          <h3>Data Quality &amp; Participant Experience</h3>
           <p class="muted"> Data loss improved across cohorts and stabilized at an acceptable internal floor. Reported adverse events
             decreased period-over-period, supporting operational quality as scale increases. <strong>&nbsp;</strong> </p>
           <p class="muted">&nbsp;</p>
@@ -1270,19 +1280,25 @@
         </div>
 
         <div class="card col-5 reveal">
-          <h3>Security &amp; multi-tenant platform</h3>
+          <h3>Security &amp; Multi-Tenant Platform</h3>
           <p class="muted">
             Enterprise-grade security improvements include strict identity-based access controls, least-privilege permissions,
             and revocable API keys—aligned with regulated product requirements.
           </p>
 
           <details data-track="updates-expand">
-            <summary>What “multi-tenant” enables</summary>
+            <summary>What “Multi-Tenant” Enables</summary>
             <p>
               Multiple studies and partners can operate independently while integrating through shared platform primitives,
               avoiding duplicated systems and reducing operational overhead.
             </p>
-          </details>
+			  
+          </details>			 
+			        <h2> A Note from Senseye's Founder</h2>
+           <p> I recently had the pleasure of sitting down with one of our investors for an in-depth conversation on the <strong>Maverick Minds Podcast</strong>. I truly enjoyed the depth of the discussion and I wanted to share the episode with all of you, as it reflects much of the hard work we’re doing together.&nbsp;</p>
+          <p>Very Respectfully,&nbsp;</p>
+                    <p><strong>David Zakariai </strong>|<strong>&nbsp;</strong>CEO/Founder | Senseye</p>
+<div class="kicker reveal"><a href="https://www.youtube.com/watch?v=-Y57lxHAFyw&t=3043s">Watch the Interview</a></div>
         </div>
       </div>
     </div>
@@ -1323,12 +1339,7 @@
     </div>
 	      <div class="container">
 <div> </div>
-			 
-			        <h2> Founding Senseye</h2>
-      <h3>The Leader Behind Making the Invisible Visible</h3>
-      <p>
-        <strong> David Durrant didn’t just build a company; he set out to solve a human crisis. </strong>Driven by personal resilience, David is bridging the gap between AI biometrics and the lived human experience. This perseverance is the blueprint for Senseye—merging deep-tech with the reality of mental health to give a voice to the silent struggles of millions.</p>
-      <h3><em><a href="https://www.youtube.com/watch?v=-Y57lxHAFyw&t=3043s">Watch the Interview</a></em></h3>
+
 
       <div class="grid">      </div>
   </section>
@@ -1344,7 +1355,7 @@
 
       <div class="grid">
         <div class="card col-12 reveal">
-          <h3 class="roadmapTitle">Strategic Roadmap: Bridging the Gap to Commercialization</h3>
+          <h2 class="roadmapTitle">Strategic Roadmap: Bridging the Gap to Commercialization</h2>
 
           <div class="tableWrap">
             <div class="tableScroll" role="region" aria-label="Strategic roadmap table (scrollable)">
@@ -1470,7 +1481,7 @@
             </div>
 
             <details data-track="timeline-expand">
-              <summary>Balanced disclosure</summary>
+              <summary>Balanced Disclosure</summary>
               <p>
                 Timeline reflects current planning and internal benchmarks. Clinical and regulatory outcomes are uncertain and not guaranteed.
                 Actual timing may shift based on trial execution and FDA review requirements.
@@ -1524,7 +1535,9 @@
       </div>
 
       <div class="footerNote">
-        © Senseye — Investor Communication (Information-only; not an offer to sell securities)
+		  
+		            <p class="muted">
+						© Senseye — Investor Communication (Information-only; not an offer to sell securities)</p>
       </div>
     </div>
   </section>
