@@ -1,0 +1,1609 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Senseye V.I.E.W. | December 2025</title>
+
+  <style>
+    :root{
+      --navy-900:#0B1023;
+      --navy-850:#0F1733;
+      --navy-800:#22294E;
+      --navy-700:#293268;
+      --blue-600:#3C4FBD;
+      --teal-500:#00D8BB;
+      --teal-600:#1A8F95;
+      --mist-50:#F5FAFF;
+      --mist-100:#DBEEF1;
+      --text-100:#EAF0FF;
+      --text-200:#C7D2FE;
+      --text-300:#9CA3AF;
+      --ink:#0B1220;
+
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+
+      --shadow-soft: 0 14px 30px rgba(0,0,0,.18);
+      --shadow-hover: 0 18px 48px rgba(0,0,0,.22);
+
+      --max: 1120px;
+
+      /* Motion + UI */
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --dur: 220ms;
+
+      --ring: 0 0 0 3px rgba(0,216,187,.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    :focus-visible{ outline: none; box-shadow: var(--ring); border-radius: 10px; }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      *, *::before, *::after{
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior:auto !important;
+      }
+    }
+
+    /* Subtle animated background sheen */
+    .bgSheen{
+      position: fixed;
+      inset: -20% -10%;
+      pointer-events:none;
+      z-index:0;
+      background:
+        radial-gradient(900px 420px at 20% 20%, rgba(0,216,187,.08), transparent 65%),
+        radial-gradient(900px 420px at 80% 10%, rgba(60,79,189,.10), transparent 60%),
+        radial-gradient(700px 380px at 70% 70%, rgba(0,216,187,.06), transparent 60%);
+      opacity: .9;
+      transform: translate3d(0,0,0);
+      animation: floaty 14s var(--ease) infinite alternate;
+    }
+    @keyframes floaty{
+      from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+      to   { transform: translate3d( 1.5%,  1%, 0) scale(1.02); }
+    }
+    body > *{ position: relative; z-index: 1; }
+
+    /* ============== HEADER ============== */
+    .topWrap{
+      position: relative; /* UPDATED: Removed sticky positioning */
+      z-index: 60;
+    }
+
+    .progressBar{
+      height: 3px;
+      background: linear-gradient(90deg, rgba(0,216,187,.95), rgba(60,79,189,.95));
+      transform-origin: 0% 50%;
+      transform: scaleX(0);
+      box-shadow: 0 10px 18px rgba(0,216,187,.18);
+    }
+
+    .heroHeader{
+      background:
+        radial-gradient(1200px 420px at 12% 10%, rgba(60,79,189,.28), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(0,216,187,.20), transparent 55%),
+        linear-gradient(180deg, var(--navy-900), var(--navy-800));
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .heroInner{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 22px 18px 16px;
+    }
+
+    .heroRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .brandLeft{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width: 0;
+    }
+
+    .heroTitleBlock{ min-width: 0; }
+
+    .heroTitle{
+      display:flex;
+      align-items:baseline;
+      gap:14px;
+      margin:0;
+      letter-spacing: .04em;
+      font-weight: 800;
+      line-height: 1.05;
+      font-size: clamp(28px, 3.2vw, 44px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .heroSubtitle{
+      margin: 10px 0 0;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(234,240,255,.72);
+      font-size: 12px;
+    }
+
+    .datePill{
+      border: 1px solid rgba(0,216,187,.35);
+      color: rgba(0,216,187,.95);
+      background: rgba(9,14,30,.35);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 650;
+      letter-spacing: .02em;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25) inset;
+      white-space: nowrap;
+      transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+    .datePill:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(0,0,0,.30) inset, 0 10px 22px rgba(0,216,187,.10);
+    }
+
+    .navBar{
+      margin-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: rgba(10,14,28,.55);
+    }
+    .navInner{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 10px;
+      position: relative;
+    }
+    .navInner:before,
+    .navInner:after{
+      content:"";
+      position:absolute;
+      top:0; bottom:0;
+      width: 24px;
+      pointer-events:none;
+      opacity:.9;
+    }
+    .navInner:before{ left:0; background: linear-gradient(90deg, rgba(10,14,28,.85), transparent); }
+    .navInner:after{ right:0; background: linear-gradient(270deg, rgba(10,14,28,.85), transparent); }
+
+    .navLinks{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      overflow:auto;
+      scrollbar-width: none;
+      padding: 6px 0;
+    }
+    .navLinks::-webkit-scrollbar{ display:none; }
+
+    .navLinks a{
+      display:inline-flex;
+      align-items:center;
+      padding: 14px 14px;
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(234,240,255,.72);
+      text-decoration:none;
+      border-radius: 999px;
+      transition:
+        color var(--dur) var(--ease),
+        background var(--dur) var(--ease),
+        transform var(--dur) var(--ease),
+        border-color var(--dur) var(--ease),
+        box-shadow var(--dur) var(--ease);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .navLinks a:hover{
+      color: rgba(255,255,255,.95);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.12);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(0,0,0,.18);
+    }
+
+    .navLinks a.active{
+      color: #fff;
+      background: rgba(0,216,187,.10);
+      border: 1px solid rgba(0,216,187,.28);
+      box-shadow: 0 10px 22px rgba(0,216,187,.10);
+    }
+
+    .tealRule{
+      height: 4px;
+      background: linear-gradient(90deg, rgba(0,216,187,.9), rgba(60,79,189,.9));
+      box-shadow: 0 12px 22px rgba(0,216,187,.16);
+    }
+
+    /* ============== LAYOUT ============== */
+    .container{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* UPDATED: scroll-margin-top reduced since header is no longer fixed */
+    section{ scroll-margin-top: 20px; } 
+    .sectionPad{ padding: 54px 0; }
+
+    .panelDark{
+      background:
+        radial-gradient(900px 420px at 15% 10%, rgba(0,216,187,.10), transparent 58%),
+        radial-gradient(900px 520px at 80% 30%, rgba(60,79,189,.16), transparent 60%),
+        linear-gradient(180deg, var(--navy-850), var(--navy-900));
+      color: #fff;
+    }
+
+    .panelLight{
+      background:
+        radial-gradient(1000px 420px at 15% 0%, rgba(0,216,187,.16), transparent 55%),
+        linear-gradient(180deg, #fff, var(--mist-50));
+      color: var(--ink);
+      border-top: 1px solid #EEF2FF;
+      border-bottom: 1px solid #EEF2FF;
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,216,187,.10);
+      border: 1px solid rgba(0,216,187,.20);
+      color: rgba(0,216,187,.95);
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 11px;
+      margin-bottom: 12px;
+    }
+
+    .title{
+      margin:0;
+      font-size: clamp(26px, 2.5vw, 38px);
+      line-height: 1.15;
+      letter-spacing: .01em;
+    }
+
+    .lede{
+      margin: 14px 0 0;
+      max-width: 820px;
+      font-size: 16px;
+      color: rgba(255,255,255,.78);
+    }
+    .panelLight .lede{ color: rgba(11,18,32,.78); }
+
+    .grid{
+      margin-top: 26px;
+      display:grid;
+      gap: 18px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .card{
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition:
+        transform var(--dur) var(--ease),
+        box-shadow var(--dur) var(--ease),
+        border-color var(--dur) var(--ease),
+        background var(--dur) var(--ease);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(135deg, rgba(0,216,187,.28), rgba(60,79,189,.22), rgba(255,255,255,0));
+      opacity: 0;
+      transition: opacity var(--dur) var(--ease);
+      pointer-events:none;
+      filter: blur(10px);
+    }
+    .card:hover{
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(0,216,187,.18);
+      background: rgba(255,255,255,.075);
+    }
+    .card:hover:before{ opacity: .95; }
+
+    .panelLight .card{
+      background: rgba(255,255,255,.80);
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 12px 28px rgba(20,30,60,.08);
+    }
+    .panelLight .card:hover{
+      box-shadow: 0 18px 46px rgba(20,30,60,.12);
+      border-color: rgba(60,79,189,.18);
+      background: rgba(255,255,255,.92);
+    }
+
+    .card h3{
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: .02em;
+    }
+
+    .muted{
+      color: rgba(255,255,255,.72);
+      margin: 0;
+    }
+    .panelLight .muted{ color: rgba(11,18,32,.72); }
+
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .miniPill{
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 650;
+      border: 1px solid rgba(0,216,187,.25);
+      color: rgba(0,216,187,.95);
+      background: rgba(0,216,187,.08);
+      transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+    }
+    .miniPill:hover{ transform: translateY(-1px); background: rgba(0,216,187,.12); }
+
+    .col-7{ grid-column: span 7; }
+    .col-5{ grid-column: span 5; }
+    .col-6{ grid-column: span 6; }
+    .col-12{ grid-column: span 12; }
+
+    @media (max-width: 900px){
+      .col-7, .col-5, .col-6{ grid-column: span 12; }
+      .heroTitle{ white-space: normal; }
+      .datePill{ display:none; }
+      section{ scroll-margin-top: 20px; } /* UPDATED */
+    }
+    @media (max-width: 520px){
+      .heroInner{ padding: 18px 14px 14px; }
+      .container{ padding: 0 14px; }
+      .sectionPad{ padding: 44px 0; }
+      .card{ padding: 16px; }
+    }
+
+    .metricTile{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .metricVal{
+      font-size: 34px;
+      font-weight: 850;
+      color: var(--teal-500);
+      letter-spacing: .01em;
+      line-height: 1;
+      text-shadow: 0 10px 20px rgba(0,216,187,.10);
+    }
+    .metricLabel{
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      margin-top: 6px;
+    }
+    .panelLight .metricLabel{ color: rgba(11,18,32,.58); }
+
+    .imgFrame{
+      border-radius: var(--radius-lg);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      transform: translateZ(0);
+    }
+    .panelLight .imgFrame{
+      border: 1px solid #E5E7EB;
+      background: #fff;
+    }
+    .imgFrame img{
+      width: 100%;
+      height: auto;
+      display:block;
+      transition: transform 420ms var(--ease), filter 420ms var(--ease);
+    }
+    .imgFrame:hover img{
+      transform: scale(1.01);
+      filter: saturate(1.05) contrast(1.03);
+    }
+
+    details{
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(0,216,187,.18);
+      background: rgba(0,216,187,.06);
+      padding: 12px 14px;
+      margin-top: 14px;
+      transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+    }
+    details:hover{
+      border-color: rgba(0,216,187,.28);
+      background: rgba(0,216,187,.085);
+    }
+    details summary{
+      cursor:pointer;
+      font-weight: 750;
+      color: rgba(255,255,255,.92);
+      list-style:none;
+      letter-spacing: .02em;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    details summary::-webkit-details-marker{ display:none; }
+    details summary:after{
+      content:"▾";
+      opacity:.85;
+      transform: translateY(-1px);
+      transition: transform var(--dur) var(--ease);
+      font-size: 14px;
+    }
+    details[open] summary:after{ transform: rotate(180deg) translateY(1px); }
+    .panelLight details summary{ color: rgba(11,18,32,.90); }
+    details p{ margin: 10px 0 0; }
+
+    .riskBox{
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.78);
+      font-size: 12.5px;
+    }
+    .panelLight .riskBox{
+      border: 1px solid #E5E7EB;
+      background: rgba(255,255,255,.70);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: rgba(11,18,32,.72);
+    }
+    .riskBox h3{
+      margin:0 0 10px;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(0,216,187,.95);
+    }
+
+    .footerNote{
+      padding: 26px 0 18px;
+      text-align:center;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+    }
+
+    /* ===== Allison Intro Hero Card ===== */
+    .introHero{
+      background:
+        radial-gradient(950px 380px at 10% 15%, rgba(0,216,187,.12), transparent 60%),
+        radial-gradient(900px 420px at 85% 0%, rgba(60,79,189,.18), transparent 60%),
+        linear-gradient(180deg, var(--navy-850), var(--navy-900));
+      color:#fff;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .introWrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 34px 18px 44px;
+    }
+    .introGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .introCard{
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      border: 1px solid rgba(0,216,187,.22);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .introCard blockquote{
+      margin:0;
+      font-size: 20px;
+      line-height: 1.45;
+      letter-spacing: .01em;
+      color: rgba(255,255,255,.95);
+      position: relative;
+    }
+    .introCard blockquote:before{
+      content:"“";
+      color: rgba(0,216,187,.95);
+      font-size: 44px;
+      line-height: 0;
+      vertical-align: -14px;
+      margin-right: 6px;
+      text-shadow: 0 14px 22px rgba(0,216,187,.20);
+    }
+    .introByline{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .avatar{
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .introByline strong{ color:#fff; }
+    .meta{
+      margin-top: 2px;
+      color: rgba(234,240,255,.70);
+      font-size: 13px;
+    }
+    .introText{
+      margin-top: 14px;
+      color: rgba(255,255,255,.78);
+    }
+
+    .introSide{
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .introSide:before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background: radial-gradient(420px 220px at 20% 10%, rgba(0,216,187,.14), transparent 60%);
+      opacity:.75;
+      pointer-events:none;
+      filter: blur(8px);
+    }
+    .introSide h3{
+      margin:0 0 20px;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(0,216,187,.95);
+      position: relative;
+    }
+
+    /* UPDATED METRIC STYLES (ICONS VERSION) */
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+    .metric:last-of-type { margin-bottom: 0; }
+    
+    .metric .icon {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      background: rgba(0, 216, 187, 0.1);
+      border: 1px solid rgba(0, 216, 187, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .metric .icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--teal-500);
+    }
+    .metricInfo {
+      display: flex;
+      flex-direction: column;
+    }
+    .metricInfo strong {
+      display: block;
+      font-size: 16px;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .metricInfo span {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 900px){
+      .introGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* ========= DREAMWEAVER-SAFE REVEAL ========= */
+    .reveal{ opacity: 1; transform: none; }
+    .js .reveal{
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 520ms var(--ease), transform 520ms var(--ease);
+    }
+    .js .reveal.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Table styling + responsive scroll container */
+    .tableWrap{
+      margin-top: 14px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 12px 28px rgba(20,30,60,.06);
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .tableScroll{
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+    thead th{
+      text-align:left;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(11,18,32,.70);
+      background: linear-gradient(180deg, rgba(245,250,255,.95), rgba(255,255,255,.90));
+      border-bottom: 1px solid #E5E7EB;
+      padding: 14px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tbody td{
+      padding: 14px 14px;
+      border-bottom: 1px solid #EEF2FF;
+      vertical-align: top;
+      color: rgba(11,18,32,.82);
+      font-size: 14px;
+    }
+    tbody tr:hover td{ background: rgba(0,216,187,.06); }
+
+    /* Optional: back to top */
+    .toTop{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 80;
+      border-radius: 999px;
+      border: 1px solid rgba(0,216,187,.28);
+      background: rgba(11,16,35,.55);
+      color: rgba(234,240,255,.92);
+      padding: 10px 12px;
+      display: inline-flex;
+      align-items:center;
+      gap: 10px;
+      text-decoration:none;
+      box-shadow: 0 18px 38px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 750;
+    }
+    .toTop.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .toTop:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 46px rgba(0,0,0,.26);
+    }
+
+    /* Strategic Roadmap Title */
+    .roadmapTitle{
+      font-size: clamp(18px, 2vw, 26px);
+      line-height: 1.2;
+      letter-spacing: .01em;
+      margin: 0 0 12px;
+    }
+
+    /* ===== Milestone Stepper ===== */
+    .timelineStepper{ margin-top: 16px; }
+
+    .timelineHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .timelineTitle{
+      margin:0;
+      font-size: clamp(16px, 1.8vw, 20px);
+      letter-spacing: .02em;
+    }
+
+    .timelineNote{
+      margin:0;
+      max-width: 520px;
+      font-size: 13px;
+      opacity: .82;
+    }
+
+    .stepperWrap{
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(60,79,189,.18);
+      background: rgba(255,255,255,.70);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 12px 28px rgba(20,30,60,.08);
+    }
+
+    .panelDark .stepperWrap{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stepper{
+      list-style:none;
+      display:flex;
+      gap: 14px;
+      padding: 16px;
+      margin:0;
+      min-width: 980px;
+      position: relative;
+      --progress: 0; /* 0..1 set via JS */
+    }
+
+    .stepper:before{
+      content:"";
+      position:absolute;
+      left: 16px;
+      right: 10px;
+      top: 24px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(0,216,187,.38), rgba(60,79,189,.38));
+      opacity: .7;
+    }
+
+    .stepper:after{
+      content:"";
+      position:absolute;
+      left: 16px;
+      top: 24px;
+      height: 2px;
+      width: calc(100% - 26px);
+      transform-origin: 0% 50%;
+      transform: scaleX(var(--progress));
+      background: linear-gradient(90deg, rgba(0,216,187,.95), rgba(60,79,189,.85));
+      box-shadow: 0 10px 18px rgba(0,216,187,.18);
+      transition: transform 700ms var(--ease);
+      opacity: .95;
+    }
+
+    .stepperTail{
+      position:absolute;
+      top: 24px;
+      right: 10px;
+      width: 150px;
+      height: 2px;
+      pointer-events:none;
+      opacity: .95;
+      background-image: radial-gradient(circle, rgba(60,79,189,.85) 1px, transparent 2px);
+      background-size: 10px 2px;
+      background-repeat: repeat-x;
+      mask-image: linear-gradient(90deg, rgba(0,0,0,1), rgba(0,0,0,0));
+      -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,1), rgba(0,0,0,0));
+    }
+    .panelDark .stepperTail{
+      background-image: radial-gradient(circle, rgba(234,240,255,.60) 1px, transparent 2px);
+    }
+
+    .step{
+      position: relative;
+      flex: 1 0 220px;
+      min-width: 220px;
+      cursor: pointer;
+    }
+
+    .dot{
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      display:block;
+      position: relative;
+      left: 10px;
+      top: 17px;
+      background: rgba(60,79,189,.30);
+      border: 1px solid rgba(60,79,189,.62);
+      box-shadow: 0 10px 18px rgba(60,79,189,.16);
+      z-index: 2;
+    }
+
+    .step.done .dot{
+      background: rgba(0,216,187,.26);
+      border-color: rgba(0,216,187,.68);
+      box-shadow: 0 10px 18px rgba(0,216,187,.14);
+    }
+
+    .step.current .dot{
+      background: rgba(0,216,187,.38);
+      border-color: rgba(0,216,187,.98);
+      box-shadow: 0 0 0 6px rgba(0,216,187,.10), 0 16px 26px rgba(0,216,187,.18);
+    }
+
+    .stepCard{
+      border-radius: 16px;
+      border: 1px solid rgba(60,79,189,.16);
+      background: rgba(255,255,255,.82);
+      padding: 14px;
+      margin-top: 8px;
+      transition:
+        transform var(--dur) var(--ease),
+        box-shadow var(--dur) var(--ease),
+        border-color var(--dur) var(--ease),
+        background var(--dur) var(--ease);
+      box-shadow: 0 12px 26px rgba(20,30,60,.08);
+      will-change: transform;
+    }
+
+    .panelDark .stepCard{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .step:hover .stepCard{
+      transform: translateY(-3px);
+      border-color: rgba(0,216,187,.22);
+      box-shadow: 0 18px 44px rgba(20,30,60,.14);
+    }
+
+    .stepTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .stepTag{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,216,187,.25);
+      background: rgba(0,216,187,.08);
+      color: rgba(11,18,32,.82);
+    }
+    .panelDark .stepTag{ color: rgba(234,240,255,.88); }
+
+    .stepWhen{
+      font-size: 12px;
+      letter-spacing: .06em;
+      opacity: .8;
+      white-space: nowrap;
+    }
+
+    .stepName{
+      font-weight: 850;
+      letter-spacing: .01em;
+      margin-bottom: 6px;
+    }
+
+    .stepDesc{
+      font-size: 13px;
+      opacity: .85;
+      line-height: 1.35;
+    }
+
+    .step.current .stepCard{
+      border-color: rgba(0,216,187,.45);
+      background:
+        radial-gradient(520px 220px at 20% 10%, rgba(0,216,187,.16), transparent 60%),
+        rgba(255,255,255,.88);
+    }
+    .panelDark .step.current .stepCard{
+      background:
+        radial-gradient(520px 220px at 20% 10%, rgba(0,216,187,.14), transparent 60%),
+        rgba(255,255,255,.07);
+    }
+
+    .step.is-default .stepCard{
+      transform: translateY(-10px);
+    }
+    .step.is-default:hover .stepCard{
+      transform: translateY(-16px);
+    }
+
+    @media (max-width: 720px){
+      .timelineHead{ flex-direction: column; align-items:flex-start; }
+      .timelineNote{ max-width: none; }
+    }
+
+    .hereWrap{
+      display: inline-flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-left: 2px;
+      position: relative;
+      top: 6px;
+    }
+
+    .hereLabel{
+      display:inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+
+      color: rgba(234,240,255,.96);
+      background: linear-gradient(180deg, rgba(11,16,35,.96), rgba(15,23,51,.92));
+      border: 1px solid rgba(0,216,187,.55);
+      border-radius: 999px;
+      padding: 5px 10px;
+
+      box-shadow:
+        0 12px 26px rgba(0,0,0,.22),
+        0 0 0 3px rgba(0,216,187,.12),
+        inset 0 0 0 1px rgba(255,255,255,.10);
+
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+
+    .hereSub{
+      font-size: 12px;
+      letter-spacing: .10em;
+      font-weight: 750;
+      color: rgba(11,18,32,.72);
+      margin-left: 2px;
+      opacity: .92;
+    }
+    .panelDark .hereSub{ color: rgba(234,240,255,.80); }
+
+    .step:not(.current) .hereWrap{
+      opacity: 0;
+      transform: translateY(6px);
+      pointer-events: none;
+    }
+
+    .step.current.is-default .hereLabel{
+      animation: herePulse 2.8s ease-in-out infinite;
+    }
+    @keyframes herePulse{
+      0%, 100% { box-shadow: 0 12px 26px rgba(0,0,0,.22), 0 0 0 3px rgba(0,216,187,.12), inset 0 0 0 1px rgba(255,255,255,.10); }
+      50%      { box-shadow: 0 16px 34px rgba(0,0,0,.26), 0 0 0 4px rgba(0,216,187,.16), inset 0 0 0 1px rgba(255,255,255,.10); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgSheen" aria-hidden="true"></div>
+
+  <div class="topWrap">
+    <div class="progressBar" id="progressBar" aria-hidden="true"></div>
+
+    <header class="heroHeader">
+      <div class="heroInner reveal">
+        <div class="heroRow">
+          <div class="brandLeft"> <img src="senseye-white-logo.png" width="300" height="76" alt=""/>
+            <div class="heroTitleBlock">
+              <h1 class="heroTitle">V.I.E.W.</h1>
+              <div class="heroSubtitle">Validation, Insight, & Executive Wrap-up</div>
+            </div>
+          </div>
+          <div class="datePill" aria-label="Report date">December 2025</div>
+        </div>
+      </div>
+
+      <div class="navBar" role="navigation" aria-label="Primary">
+        <div class="navInner">
+          <nav class="navLinks" id="navLinks">
+            <a href="#senseye" class="navlink">Senseye</a>
+            <a href="#validation" class="navlink">Validation</a>
+            <a href="#updates" class="navlink">Updates</a>
+            <a href="#employee" class="navlink">Employee</a>
+            <a href="#clinical" class="navlink">Clinical</a>
+            <a href="#opportunity" class="navlink">Opportunity</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="tealRule" aria-hidden="true"></div>
+    </header>
+  </div>
+
+  <section class="introHero">
+    <div class="introWrap">
+      <div class="introGrid">
+        <div class="introCard reveal">
+          <blockquote>
+            I have always believed that the best products sit at the juncture of technical brilliance and human empathy.
+          </blockquote>
+
+          <div class="introByline">
+           <div class="imgFrame" style="margin-bottom:10px;"><img src="Allison-Fabian-SVP-Senseye.png" width="281" height="361" alt=""/></div>
+            <div>
+              <div><strong>I’m Allison Fabian, and throughout my six-year tenure here at Senseye, I’ve had the privilege of wearing many hats to ensure those two worlds stay connected.</strong></div>
+              <div class="meta">SVP, Strategy &amp; Operations</div>
+            </div>
+          </div>
+
+          <p class="introText">
+            As I begin collaborating with David on these updates, I’d like to introduce myself not just as your SVP of Strategy &amp; Operations,
+            but as a dedicated advocate who understands what this work can mean for the people and families we serve.
+          </p>
+
+          <p class="introText">
+            Witnessing the enduring psychological toll on family members who served in law enforcement during 9/11 has
+            given me a personal perspective on the life-changing potential of the Senseye Diagnostic for those navigating
+            PTSD and other complex conditions.
+          </p>
+
+          <p class="introText">
+            We’re ending the year with a new format for these updates, with the goal of providing deeper insight into the
+            work happening at Senseye. One of our stakeholders asked for a more personal view of the company, so I’ll be
+            highlighting a different employee and their work in each update. <strong><em>I’m excited to share the progress we’ve made
+            as we close out 2025. </em></strong></p>
+        </div>
+
+        <aside class="introSide reveal" aria-label="This month at a glance">
+          <h3>This month at a glance</h3>
+          
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <div class="metricInfo"><strong>4,000+ Participants</strong><span>Enrolled in the latest ML study</span></div>
+          </div>
+
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg></div>
+            <div class="metricInfo"><strong>3–5× Efficiency</strong><span>Processing gain in POG model</span></div>
+          </div>
+
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
+            <div class="metricInfo"><strong>26% Data Loss ↓</strong><span>Stability at 10k+ runs; 80% error reduction</span></div>
+          </div>
+
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 2c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zM7 18c0-1.6 2.2-2.5 5-2.5s5 .9 5 2.5v1H7v-1z"/></svg></div>
+            <div class="metricInfo"><strong>Platform Stability</strong><span>Validated at 10,000+ participant runs</span></div>
+          </div>
+
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M19 19H5V8h14v11zM16 1h-8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-3V1z"/></svg></div>
+            <div class="metricInfo"><strong>Feb 23, 2026</strong><span>Phase III Kickoff Scheduled</span></div>
+          </div>
+
+          <div class="metric">
+            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg></div>
+            <div class="metricInfo"><strong>Senate Advocacy</strong><span>Meetings with Veteran Affairs Committee shown below</span></div>
+          </div>
+                 <div class="imgFrame" style="margin-bottom:14px;"> <img src="Senseye-Visiting-Veteran-Affairs-Meetings.png" width="400" height="265" alt=""/>  </div>      </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="senseye" class="panelDark sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Senseye</div>
+      <h2 class="title reveal">From research to scalable clinical readiness</h2>
+      <p class="lede reveal">
+        Senseye has strengthened the platform, data pipeline, and machine learning foundation needed to
+        support scaled clinical operations and a go-to-market path aligned with regulated environments.
+      </p>
+
+      <div class="grid">
+        <div class="card col-7 reveal">
+          <h3>Executive overview</h3>
+          <p class="muted">
+            Over the past months, Senseye improved study efficiency, reduced data loss, and built a secure,
+            multi-tenant platform capable of supporting multiple studies, partners, and environments—without
+            duplicating systems.
+          </p>
+
+          <div class="pillRow">
+            <span class="miniPill">10,000+ participant runs</span>
+            <span class="miniPill">26% data loss reduction</span>
+            <span class="miniPill">80%+ reduction in user error</span>
+          </div>
+        </div>
+
+        <div class="card col-5 reveal">
+          <div class="metricTile">
+            <div>
+              <div class="metricVal">19</div>
+              <div class="metricLabel">Employees</div>
+            </div>
+            <div style="text-align:right">
+              <div class="metricVal">4,000+</div>
+              <div class="metricLabel">Recent study participants</div>
+            </div>
+          </div>
+
+          <details data-track="senseye-expand">
+            <summary>Read more</summary>
+            <p>
+              The platform is built for rapid iteration, secure access controls, and operational stability—key
+              requirements for the next phase of clinical scale.
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="validation" class="panelLight sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Validation</div>
+      <h2 class="title reveal">Beyond Guessing: Validation Alpha Established</h2>
+      <p class="lede reveal">
+        An AUC of 0.50 is a coin flip. Reaching 0.628 indicates the algorithm has identified proprietary
+        biological signals for PTSD—while acknowledging that additional clinical trials are required as part
+        of the FDA pathway.
+      </p>
+
+      <div class="grid">
+        <div class="card col-6 reveal">
+          <h3>Computer vision accuracy</h3>
+          <p class="muted">Highlight: AUC improved to <strong>0.628</strong> with merged metadata; MCC improved to <strong>0.250</strong>.</p>
+          <p class="muted">&nbsp;</p>
+<div class="imgFrame">
+          <img src="Senseye-Validation-Chart.png" width="1041" height="427" alt=""/>
+          </div>
+
+          <details data-track="validation-expand">
+            <summary>Investor context (read more)</summary>
+            <p>
+              This internal benchmark supports continued optimization and informs the Phase III kickoff. It does not
+              constitute a guarantee of regulatory clearance or future performance.
+            </p>
+          </details>
+        </div>
+
+        <div class="card col-6 reveal">
+          <h3>Why this matters</h3>
+          <p class="muted">
+            Accuracy improvements, paired with major processing efficiency gains, reduce operational friction and
+            support scalable trial execution—an important bridge between R&amp;D and commercialization.
+          </p>
+
+          <div class="grid" style="margin-top:14px">
+            <div class="card col-6" style="box-shadow:none;">
+              <div class="metricVal">0.628</div>
+              <div class="metricLabel">AUC (internal benchmark)</div>
+            </div>
+            <div class="card col-6" style="box-shadow:none;">
+              <div class="metricVal">3–5×</div>
+              <div class="metricLabel">Processing efficiency</div>
+            </div>
+          </div>
+
+          <details data-track="balanced-disclosure">
+            <summary>Balanced disclosure (required)</summary>
+            <p>
+              Further clinical trials are required as part of FDA review. Clinical and regulatory outcomes are not guaranteed.
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="updates" class="panelDark sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Updates</div>
+      <h2 class="title reveal">Platform Improvements &amp; Operational Momentum</h2>
+      <p class="lede reveal">
+        Infrastructure upgrades, improved instructions, and stronger UX reduced data loss and user error, improving
+        study efficiency and readiness for higher-volume execution.
+      </p>
+
+      <div class="grid">
+        <div class="card col-7 reveal">
+          <h3>Data quality &amp; participant experience</h3>
+          <p class="muted"> Data loss improved across cohorts and stabilized at an acceptable internal floor. Reported adverse events
+            decreased period-over-period, supporting operational quality as scale increases. <strong>[UPDATING CHART BELOW--TO COME]</strong> </p>
+          <p class="muted">&nbsp;</p>
+<div class="imgFrame">
+          <img src="chart1.png" width="1698" height="812" alt=""/>
+          </div>
+        </div>
+
+        <div class="card col-5 reveal">
+          <h3>Security &amp; multi-tenant platform</h3>
+          <p class="muted">
+            Enterprise-grade security improvements include strict identity-based access controls, least-privilege permissions,
+            and revocable API keys—aligned with regulated product requirements.
+          </p>
+
+          <details data-track="updates-expand">
+            <summary>What “multi-tenant” enables</summary>
+            <p>
+              Multiple studies and partners can operate independently while integrating through shared platform primitives,
+              avoiding duplicated systems and reducing operational overhead.
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="employee" class="panelDark sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Employee Highlight</div>
+      <h2 class="title reveal">David Durrant, SVP Development</h2>
+      <p class="lede reveal">
+        A spotlight on the leader driving platform reliability, production readiness, and engineering execution.
+      </p>
+
+      <div class="grid">
+        <div class="card col-6 reveal">
+          <div class="imgFrame" style="margin-bottom:14px;"> <img src="David-SVP-Senseye-Employee.png" width="1408" height="1318" alt="David Durrant"/>
+          </div>
+        </div>
+
+        <div class="card col-6 reveal">
+          <h3>Leadership &amp; Execution</h3>
+          <p class="muted"> David has transformed development at Senseye by strengthening agile process, enabling faster iteration,
+                        and guiding both engineering and machine learning teams. He architected the multi-tenant platform and
+                        elevated the app from research-ready to robust, secure, production-quality deployment. </p>
+                      <p class="muted">&nbsp;</p>
+<h3>Why it Matters</h3>
+          <p class="muted">
+            A stable, secure platform reduces operational risk during clinical scale. It supports rapid protocol refinement,
+            enterprise access controls, and dependable performance as Senseye ramps toward Phase III execution.
+          </p>
+
+          <div class="pillRow">
+            <span class="miniPill">Multi-tenant architecture</span>
+            <span class="miniPill">Enterprise-grade security</span>
+            <span class="miniPill">Production-quality UX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="clinical" class="panelLight sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Clinical</div>
+      <h2 class="title reveal">Phase III Kickoff &amp; Regulatory Path</h2>
+      <p class="lede reveal">
+        Phase III is scheduled to kick off on <strong>February 23, 2026</strong>, scaling rapidly to high monthly enrollment
+        and evolving into the pivotal study supporting FDA submission.
+      </p>
+
+      <div class="grid">
+        <div class="card col-12 reveal">
+          <h3 class="roadmapTitle">Strategic Roadmap: Bridging the Gap to Commercialization</h3>
+
+          <div class="tableWrap">
+            <div class="tableScroll" role="region" aria-label="Strategic roadmap table (scrollable)">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Strategic Phase</th>
+                    <th>Clinical &amp; Operations</th>
+                    <th>Technical Product</th>
+                    <th>Commercial &amp; Go-to-Market</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Phase 1</strong><br/>De-risking &amp; Data Scale (Q1–Q2 2026)</td>
+                    <td>Feb 23: Phase III kickoff; ramp to high-volume enrollment</td>
+                    <td>Model “freeze” for regulatory-grade testing; maintain 5× efficiency</td>
+                    <td>Early funding signals; reimbursement pathway work (coding/pricing)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Phase 2</strong><br/>Pivotal Validation &amp; Regulatory Prep (Q3–Q4 2026)</td>
+                    <td>Data collection reaches critical mass</td>
+                    <td>Machine learning model dev, Enterprise hardening aligned with regulated requirements</td>
+                    <td>Strategic partnerships for post-approval pilots</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Phase 3</strong><br/>Market Entry &amp; Initial Revenue (2027 target)</td>
+                    <td>Pivotal transition; Ground-truth data set established FDA submission package finalized for review</td>
+                    <td>Clinical integration into initial partner environments</td>
+                    <td>Initial commercial revenue post-clearance</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="timelineStepper" id="timelineStepper" data-track="timeline-stepper">
+            <div class="timelineHead">
+              <h4 class="timelineTitle">Milestone Timeline</h4>
+              <p class="timelineNote"><strong>Key milestones from Validation Alpha through market entry (post-clearance).</strong></p>
+            </div>
+
+            <div class="stepperWrap" role="region" aria-label="Milestone timeline (scrollable)">
+              <ol class="stepper" aria-label="Milestone steps">
+                <span class="stepperTail" aria-hidden="true"></span>
+
+                <li class="step done" data-step="validation-alpha">
+                  <span class="dot" aria-hidden="true"></span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Complete</span>
+                      <span class="stepWhen">2025</span>
+                    </div>
+                    <div class="stepName">Validation Alpha</div>
+                    <div class="stepDesc">Internal benchmark reached (0.628 AUC).</div>
+                  </div>
+                </li>
+
+                <li class="step done" data-step="efficiency">
+                  <span class="dot" aria-hidden="true"></span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Complete</span>
+                      <span class="stepWhen">2025</span>
+                    </div>
+                    <div class="stepName">3–5× Efficiency</div>
+                    <div class="stepDesc">Processing gains to reduce operational friction.</div>
+                  </div>
+                </li>
+
+                <li class="step current is-default" data-step="phase-iii-kickoff">
+                  <span class="dot" aria-hidden="true"></span>
+                  <span class="hereWrap" aria-hidden="true">
+                    <span class="hereLabel">We are here</span>
+                    <span class="hereSub">Phase III Execution</span>
+                  </span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Next</span>
+                      <span class="stepWhen">Feb 23, 2026</span>
+                    </div>
+                    <div class="stepName">Phase III Kickoff</div>
+                    <div class="stepDesc">Scale enrollment and execute pivotal study pathway.</div>
+                  </div>
+                </li>
+
+                <li class="step" data-step="pivotal-transition">
+                  <span class="dot" aria-hidden="true"></span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Planned</span>
+                      <span class="stepWhen">2026</span>
+                    </div>
+                    <div class="stepName">Pivotal Transition</div>
+                    <div class="stepDesc">Ground-truth dataset reaches critical mass.</div>
+                  </div>
+                </li>
+
+                <li class="step" data-step="fda-submission">
+                  <span class="dot" aria-hidden="true"></span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Planned</span>
+                      <span class="stepWhen">Target</span>
+                    </div>
+                    <div class="stepName">FDA Submission</div>
+                    <div class="stepDesc">Submission package prepared for review.</div>
+                  </div>
+                </li>
+
+                <li class="step" data-step="market-entry">
+                  <span class="dot" aria-hidden="true"></span>
+                  <div class="stepCard">
+                    <div class="stepTop">
+                      <span class="stepTag">Planned</span>
+                      <span class="stepWhen">2027+</span>
+                    </div>
+                    <div class="stepName">Market Entry</div>
+                    <div class="stepDesc">Initial revenue post-clearance and adoption.</div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <details data-track="timeline-expand">
+              <summary>Balanced disclosure</summary>
+              <p>
+                Timeline reflects current planning and internal benchmarks. Clinical and regulatory outcomes are uncertain and not guaranteed.
+                Actual timing may shift based on trial execution and FDA review requirements.
+              </p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="opportunity" class="panelLight sectionPad">
+    <div class="container">
+      <div class="kicker reveal">Opportunity</div>
+      <h2 class="title reveal">For Prospective Investors</h2>
+      <p class="lede reveal">
+        Senseye has reached a pivotal inflection point. With a validated 0.628 AUC and meaningful processing efficiency gains,
+        we have bridged key technical milestones ahead of the Phase III kickoff.
+      </p>
+      <p class="lede reveal">
+        <strong>The Key Takeaway: </strong>We are no longer testing if eye-tracking can detect PTSD; we are now optimizing how accurately it does so.
+        The 0.628 AUC is the benchmark that proves our path is <strong><em>supported by data</em></strong>, not just clinical theory.
+      </p>
+
+      <div class="grid">
+        <div class="card col-7 reveal">
+          <h3>Strategic participation (compliance-forward)</h3>
+          <p class="muted">
+            This page is for informational purposes only and is not an offer to sell securities. Any offering, if made, will be
+            made only through confidential offering materials and only to Accredited Investors.
+          </p>
+
+          <details data-track="opportunity-expand">
+            <summary>Read more</summary>
+            <p>
+              Metrics referenced are based on internal studies and are not a guarantee of FDA approval or future performance.
+              Clinical trials involve inherent risks and outcomes are not guaranteed.
+            </p>
+          </details>
+        </div>
+
+        <div class="card col-5 reveal">
+          <div class="riskBox">
+            <h3>Strategic Risk Disclosures</h3>
+            <ul>
+              <li>Clinical &amp; regulatory outcomes are uncertain; clearance is not guaranteed.</li>
+              <li>Scaling to high-volume Phase III execution presents operational risks.</li>
+              <li>Additional funding rounds may be required to reach commercialization.</li>
+              <li>Market adoption depends on reimbursement and health system integration.</li>
+            </ul>
+            <p style="margin:10px 0 0;">
+              <strong>Safe Harbor:</strong> This communication contains forward-looking statements subject to risks and uncertainties.
+              Actual results may differ materially. Senseye assumes no obligation to update forward-looking statements.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerNote">
+        © Senseye — Investor Communication (Information-only; not an offer to sell securities)
+      </div>
+    </div>
+  </section>
+
+  <a class="toTop" id="toTop" href="#senseye" aria-label="Back to top">↑ Top</a>
+
+  <script>
+    // Reveal effects toggle
+    document.documentElement.classList.add("js");
+
+    // Nav Logic
+    const navLinks = Array.from(document.querySelectorAll(".navlink"));
+    const sections = navLinks
+      .map(a => document.querySelector(a.getAttribute("href")))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      navLinks.forEach(a => {
+        const match = a.getAttribute("href") === `#${id}`;
+        a.classList.toggle("active", match);
+      });
+    };
+
+    const obs = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.id) setActive(visible.target.id);
+    }, { root: null, threshold: [0.25, 0.5, 0.7] });
+
+    sections.forEach(sec => obs.observe(sec));
+
+    // Scroll progress bar
+    const progressBar = document.getElementById("progressBar");
+    const toTop = document.getElementById("toTop");
+
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) : 0;
+      progressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+
+      if (scrollTop > 700) toTop.classList.add("is-visible");
+      else toTop.classList.remove("is-visible");
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    // Reveal-on-scroll logic
+    const revealEls = Array.from(document.querySelectorAll(".reveal"));
+    if (!("IntersectionObserver" in window)) {
+      revealEls.forEach(el => el.classList.add("is-visible"));
+    } else {
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            revealObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => revealObs.observe(el));
+    }
+
+    // Timeline Animation
+    (() => {
+      const timeline = document.getElementById("timelineStepper");
+      if (!timeline) return;
+      const stepper = timeline.querySelector(".stepper");
+      const steps = Array.from(stepper.querySelectorAll(".step"));
+      const defaultStep = stepper.querySelector(".step.is-default");
+      const setProgress = (stepEl) => {
+        const idx = Math.max(0, steps.indexOf(stepEl));
+        const p = (idx / Math.max(1, steps.length - 1)) * 0.92;
+        stepper.style.setProperty("--progress", String(p));
+      };
+      const setCurrent = (stepEl) => {
+        if (!stepEl) return;
+        steps.forEach(s => s.classList.remove("current"));
+        stepEl.classList.add("current");
+        setProgress(stepEl);
+      };
+      setCurrent(steps.find(s => s.classList.contains("current")) || defaultStep);
+      steps.forEach(step => step.addEventListener("click", () => setCurrent(step)));
+    })();
+  </script>
+</body>
+</html>
