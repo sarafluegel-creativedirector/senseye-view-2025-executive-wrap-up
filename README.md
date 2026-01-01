@@ -25,8 +25,8 @@ Stability: Platform validated at over 10,000 participant runs with an 80%+ reduc
 Phase III Kickoff: Scheduled for February 23, 2026.
 
 How to View the Report
-The report is hosted via GitHub Pages and can be viewed live at the link below: 
-(https://sarafluegel-creativedirector.github.io/senseye-view-2025-executive-wrap-up/index.html)
+The report is hosted via GitHub Pages and can be viewed live at the link: 
+https://sarafluegel-creativedirector.github.io/senseye-view-2025-executive-wrap-up/index.html
 
 Contents
 index.html: The main file.
