@@ -1,6 +1,6 @@
-# senseye-view-dec-2025
+# senseye-view-2025-executive-wrap-up
 
-Senseye V.I.E.W. | December 2025
+Senseye V.I.E.W. | 2025 Executive Wrap-up
 Validation, Insight, & Executive Wrap-up
 
 ⚠️ Confidentiality & Disclaimer
